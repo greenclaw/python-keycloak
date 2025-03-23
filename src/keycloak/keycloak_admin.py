@@ -473,8 +473,6 @@ class KeycloakAdmin:
             expected_codes=[HTTP_CREATED],
         )
 
-        return raise_error_from_response(data_raw, KeycloakPostError)
-
     def update_organization(self, organization_id: str, payload: dict) -> dict | bytes:
         """
         Update an existing organization.
