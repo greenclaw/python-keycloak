@@ -548,6 +548,18 @@ class KeycloakAdmin:
         data_raw = self.connection.raw_delete(url)
         return raise_error_from_response(data_raw, KeycloakDeleteError, expected_codes=[204])
 
+    def get_member_organizations(self, member_id: str) -> list | bytes:
+        """
+        Returns the organizations associated with the user that has the specified id.
+        
+        :param member_id: ID of the user/member
+        :type member_id: str
+        :return: List of organizations (OrganizationRepresentation)
+        :rtype: list | bytes
+        """
+        params_path = {"realm-name": self.connection.realm_name, "member-id": member_id}
+        data_raw = self.connection.raw_get(urls_patterns.URL_ADMIN_ORGANIZATIONS_MEMBER_ORGS.format(**params_path))
+        return raise_error_from_response(data_raw, KeycloakGetError)
 
     def get_users(self, query: dict | None = None) -> list:
         """
