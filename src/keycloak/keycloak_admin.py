@@ -451,7 +451,7 @@ class KeycloakAdmin:
         data_raw = self.connection.raw_get(urls_patterns.URL_ADMIN_ORGANIZATION_BY_ID.format(**params_path))
         return raise_error_from_response(data_raw, KeycloakGetError)
 
-    def create_organization(self, payload: dict) -> dict | bytes:
+    def create_organization(self, payload: dict, skip_exists: bool = False) -> dict | bytes:
         """
         Create a new organization.
         :param payload: Dictionary containing organization details
@@ -461,7 +461,6 @@ class KeycloakAdmin:
         """
         params_path = {"realm-name": self.connection.realm_name}
 
-        print(payload)
         data_raw = self.connection.raw_post(
             urls_patterns.URL_ADMIN_ORGANIZATIONS.format(**params_path),
             data=json.dumps(payload),
@@ -471,6 +470,7 @@ class KeycloakAdmin:
             data_raw,
             KeycloakPostError,
             expected_codes=[HTTP_CREATED],
+            skip_exists=skip_exists,
         )
 
     def update_organization(self, organization_id: str, payload: dict) -> dict | bytes:
