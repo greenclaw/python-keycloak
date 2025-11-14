@@ -429,14 +429,22 @@ class KeycloakAdmin:
         )
 
 
-    def get_organizations(self) -> list | bytes:
+    def get_organizations(self, query: dict | None = None) -> list | bytes:
         """
         Fetch all organizations in the realm.
+
+        :param query: Query parameters (optional)
+                     - exact: Boolean flag for exact search (default: False)
+                     - search: Search string to filter organizations
+        :type query: dict
         :return: List of organizations
         :rtype: list | bytes
         """
+        query = query or {}
         params_path = {"realm-name": self.connection.realm_name}
-        data_raw = self.connection.raw_get(urls_patterns.URL_ADMIN_ORGANIZATIONS.format(**params_path))
+        data_raw = self.connection.raw_get(
+            urls_patterns.URL_ADMIN_ORGANIZATIONS.format(**params_path), **query
+        )
         return raise_error_from_response(data_raw, KeycloakGetError)
 
     def get_organization(self, organization_id: str) -> dict | bytes:
